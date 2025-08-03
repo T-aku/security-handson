@@ -71,8 +71,12 @@ fastify.get("/api/products", async (request, reply) => {
 
 //   return new Promise((resolve, reject) => {
 //     db.all(query, params, (err, rows) => {
-//       if (err) reject(err);
-//       else resolve(rows);
+//       if (err) {
+//         console.error("Database error:", err);
+//         reject(err);
+//       } else {
+//         resolve(rows);
+//       }
 //     });
 //   });
 // });
@@ -116,9 +120,14 @@ fastify.post("/api/admin/login", async (request, reply) => {
 
 //   return new Promise((resolve, reject) => {
 //     db.get(query, [username, password], (err, row) => {
-//       if (err) reject(err);
-//       else if (row) resolve({ success: true, user: row });
-//       else resolve({ success: false, message: "Invalid credentials" });
+//       if (err) {
+//         console.error("Login error:", err);
+//         reject(err);
+//       } else if (row) {
+//         resolve({ success: true, user: row });
+//       } else {
+//         resolve({ success: false, message: "Invalid credentials" });
+//       }
 //     });
 //   });
 // });
@@ -151,8 +160,12 @@ fastify.get("/api/products/:id", async (request, reply) => {
 
 //   return new Promise((resolve, reject) => {
 //     db.get(query, [id], (err, row) => {
-//       if (err) reject(err);
-//       else resolve(row);
+//       if (err) {
+//         console.error("Database error:", err);
+//         reject(err);
+//       } else {
+//         resolve(row);
+//       }
 //     });
 //   });
 // });
@@ -171,14 +184,6 @@ fastify.get("/api/categories", async (request, reply) => {
     });
   });
 });
-
-// // カテゴリ一覧取得API(安全版)
-// fastify.get("/api/categories", async (request, reply) => {
-//   db.all("SELECT DISTINCT category FROM insurance_products", (err, rows) => {
-//     if (err) reply.send(err);
-//     else reply.send(rows.map((r: any) => r.category));
-//   });
-// });
 
 // サーバー起動
 const start = async () => {
