@@ -50,6 +50,33 @@ fastify.get("/api/products", async (request, reply) => {
   });
 });
 
+// // 保険商品一覧取得API(安全版)
+// fastify.get("/api/products", async (request, reply) => {
+//   const { search = "", category } = request.query as {
+//     search?: string;
+//     category?: string;
+//   };
+
+//   let query = "SELECT * FROM insurance_products WHERE 1=1";
+//   const params: any[] = [];
+
+//   if (search) {
+//     query += " AND name LIKE ?";
+//     params.push(`%${search}%`);
+//   }
+//   if (category) {
+//     query += " AND category = ?";
+//     params.push(category);
+//   }
+
+//   return new Promise((resolve, reject) => {
+//     db.all(query, params, (err, rows) => {
+//       if (err) reject(err);
+//       else resolve(rows);
+//     });
+//   });
+// });
+
 // 管理者ログインAPI
 // 【脆弱性あり】SQLインジェクション攻撃が可能
 fastify.post("/api/admin/login", async (request, reply) => {
@@ -77,6 +104,25 @@ fastify.post("/api/admin/login", async (request, reply) => {
   });
 });
 
+// // 管理者ログインAPI(安全版)
+// fastify.post("/api/admin/login", async (request, reply) => {
+//   const { username, password } = request.body as {
+//     username: string;
+//     password: string;
+//   };
+
+//   const query =
+//     "SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1";
+
+//   return new Promise((resolve, reject) => {
+//     db.get(query, [username, password], (err, row) => {
+//       if (err) reject(err);
+//       else if (row) resolve({ success: true, user: row });
+//       else resolve({ success: false, message: "Invalid credentials" });
+//     });
+//   });
+// });
+
 // 商品詳細取得API
 // 【脆弱性あり】SQLインジェクション攻撃が可能
 fastify.get("/api/products/:id", async (request, reply) => {
@@ -98,6 +144,19 @@ fastify.get("/api/products/:id", async (request, reply) => {
   });
 });
 
+// // 商品詳細取得API(安全版)
+// fastify.get("/api/products/:id", async (request, reply) => {
+//   const { id } = request.params as { id: string };
+//   const query = "SELECT * FROM insurance_products WHERE id = ?";
+
+//   return new Promise((resolve, reject) => {
+//     db.get(query, [id], (err, row) => {
+//       if (err) reject(err);
+//       else resolve(row);
+//     });
+//   });
+// });
+
 // カテゴリ一覧取得API
 fastify.get("/api/categories", async (request, reply) => {
   const query = "SELECT DISTINCT category FROM insurance_products";
@@ -112,6 +171,14 @@ fastify.get("/api/categories", async (request, reply) => {
     });
   });
 });
+
+// // カテゴリ一覧取得API(安全版)
+// fastify.get("/api/categories", async (request, reply) => {
+//   db.all("SELECT DISTINCT category FROM insurance_products", (err, rows) => {
+//     if (err) reply.send(err);
+//     else reply.send(rows.map((r: any) => r.category));
+//   });
+// });
 
 // サーバー起動
 const start = async () => {
