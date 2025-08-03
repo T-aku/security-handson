@@ -1,7 +1,7 @@
-import * as sqlite3 from 'sqlite3';
-import * as path from 'path';
+import * as sqlite3 from "sqlite3";
+import * as path from "path";
 
-const dbPath = path.join(__dirname, '../database.sqlite');
+const dbPath = path.join(__dirname, "../database.sqlite");
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
@@ -28,27 +28,28 @@ db.serialize(() => {
 
   // サンプルデータ挿入
   const products = [
-    ['生命保険プラン A', '<script>alert("XSS Test")</script>基本的な生命保険です', 50000, '生命保険'],
-    ['自動車保険プラン B', '自動車事故に対する補償<img src="x" onerror="alert(\'XSS\')">', 30000, '自動車保険'],
-    ['火災保険プラン C', '住宅火災に対する保険です', 25000, '火災保険'],
-    ['医療保険プラン D', '病気やケガの治療費をカバー', 40000, '医療保険'],
-    ['旅行保険プラン E', '海外旅行時の万が一に備えて<script>console.log("Vulnerable")</script>', 15000, '旅行保険']
+    ["生命保険プラン A", "生命保険です", 50000, "生命保険"],
+    ["自動車保険プラン B", "自動車事故に対する補償", 30000, "自動車保険"],
+    ["火災保険プラン C", "住宅火災に対する保険です", 25000, "火災保険"],
+    ["医療保険プラン D", "病気やケガの治療費をカバー", 40000, "医療保険"],
+    ["旅行保険プラン E", "海外旅行時の万が一に備えて", 15000, "旅行保険"],
   ];
 
-  products.forEach(product => {
+  products.forEach((product) => {
     db.run(
-      'INSERT INTO insurance_products (name, description, price, category) VALUES (?, ?, ?, ?)',
+      "INSERT INTO insurance_products (name, description, price, category) VALUES (?, ?, ?, ?)",
       product
     );
   });
 
   // 管理者ユーザー作成
-  db.run(
-    'INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
-    ['admin', 'password123', 'admin']
-  );
+  db.run("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", [
+    "admin",
+    "password123",
+    "admin",
+  ]);
 
-  console.log('データベースの初期化が完了しました');
+  console.log("データベースの初期化が完了しました");
 });
 
 db.close();
